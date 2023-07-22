@@ -27,17 +27,15 @@ class JsonSaver(VacancyStorage):
 
     def connect(self):
         if not os.path.exists(self.path):
-            with open(self.path, 'w') as file:
+            with open(self.path, 'w', encoding='utf-8') as file:
                 file.write(json.dumps([]))
-
     def select(self, keyword):
         self.keyword = keyword
-        # поиск по keyword в файле
 
     def insert(self, vacancy):
         vacancy_json = vacancy.to_json()
-        with open(self.path, "a") as file:
-            file.write(json.dumps(vacancy_json) + '\n')
+        with open(self.path, "a", encoding='utf-8') as file:
+            file.write(json.dumps(vacancy_json, ensure_ascii=False) + '\n')
 
     def match_keyword(self, vacancy, keyword):
         if keyword.lower() in vacancy['title'].lower() or keyword.lower() in vacancy['description'].lower():
@@ -47,23 +45,31 @@ class JsonSaver(VacancyStorage):
 
     def delete(self, keyword):
         temp_file_path = self.path + '.temp'
-        with open(self.path, "r") as file, open(temp_file_path, "w") as temp_file:
+        with open(self.path, "r", encoding='utf-8') as file, open(temp_file_path, "w", encoding='utf-8') as temp_file:
             for line in file:
                 vacancy = json.loads(line)
                 if not self.match_keyword(vacancy, keyword):
                     temp_file.write(line)
         os.replace(temp_file_path, self.path)
 
+class CustomHeadHunterAPI(HeadHunterAPI):
+    def match_keyword(self, vacancy, keyword):
+        pass
+
+class CustomSuperJobAPI(SuperJobAPI):
+    def match_keyword(self, vacancy, keyword):
+        pass
+
 
 if __name__ == '__main__':
     storage = JsonSaver('TEST_jsonSaver.json')
 
-    hh_api = HeadHunterAPI()
+    hh_api = CustomHeadHunterAPI()
     hh_vacancies = hh_api.get_vacancies()
     for vacancy in hh_vacancies:
         storage.insert(vacancy)
 
-    sj_api = SuperJobAPI()
+    sj_api = CustomSuperJobAPI()
     sj_vacancies = sj_api.get_vacancies()
     for vacancy in sj_vacancies:
         storage.insert(vacancy)
