@@ -1,17 +1,20 @@
 import requests
-from api import API
+from api.api import API
 from vacancie import Vacancie
 
 
 class HeadHunterAPI(API):
     def connect(self):
         # Connect to the HeadHunter API
-        params = {'text': 'python'}
+        params = {'text': 'экскаваторщик'}
         response = requests.get('https://api.hh.ru/vacancies', params=params)
         if response.status_code == 200:
             return response.json()
         else:
             return None
+
+    def match_keyword(self, vacancy, keyword):
+        return keyword.lower() in vacancy['name'].lower()
 
     def get_vacancies(self):
         # Get job vacancies from the HeadHunter API

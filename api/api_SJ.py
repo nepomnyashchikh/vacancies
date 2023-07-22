@@ -1,5 +1,5 @@
 import requests
-from api import API
+from api.api import API
 from vacancie import Vacancie
 
 class SuperJobAPI(API):
@@ -30,6 +30,9 @@ class SuperJobAPI(API):
 
             print(f"An error occurred: {e}")
             return None
+
+    def match_keyword(self, vacancy, keyword):
+        return keyword.lower() in vacancy['profession'].lower()
 
 
     def get_vacancies(self):
