@@ -4,8 +4,16 @@ from vacancie import Vacancie
 
 class SuperJobAPI(API):
     def __init__(self):
-       pass
-
+        '''
+        Параметры для поиска вакансий
+        '''
+        self.search_params = None
+        self.__area = None
+        self.__experience = None
+        self.__only_with_salary = 0
+        self.__salary = None
+        self.__page = 0
+        self.__count = 100
     def connect(self):
         # Connect to the SuperJob API
 
@@ -16,8 +24,14 @@ class SuperJobAPI(API):
         '''
 
         params = {
-            'keyword': 'Python'
-        }
+                    "keyword": self.search_params,
+                    "experience": self.__experience,
+                    "town": self.__area,
+                    "no_agreement": self.__only_with_salary,
+                    "payment_from": self.__salary,
+                    "page": self.__page,
+                    "count": self.__count
+                }
         headers = {
             'X-Api-App-Id': 'v3.h.4496946.a4de17e42d306b1d0cd5ea6ff54597dc93771b3a.b067604f53dbe9997179663d5fd85029dd0199bc'
         }

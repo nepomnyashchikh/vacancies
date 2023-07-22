@@ -4,9 +4,31 @@ from vacancie import Vacancie
 
 
 class HeadHunterAPI(API):
+
+    def __init__(self):
+        '''
+        Параметры для поиска вакансий
+        '''
+        self.search_params = None
+        self.__area = None
+        self.__experience = None
+        self.__currency = None
+        self.__only_with_salary = False
+        self.__salary = None
+        self.__page = 0
+        self.__per_page = 100
+
     def connect(self):
         # Connect to the HeadHunter API
-        params = {'text': 'экскаваторщик'}
+        params = {"text": self.search_params,
+                    "experience": self.__experience,
+                    "area": self.__area,
+                    "only_with_salary": self.__only_with_salary,
+                    "currency": self.__currency,
+                    "salary": self.__salary,
+                    "page": self.__page,
+                    "per_page": self.__per_page
+                }
         response = requests.get('https://api.hh.ru/vacancies', params=params)
         if response.status_code == 200:
             return response.json()
