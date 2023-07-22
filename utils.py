@@ -37,7 +37,7 @@ class InteractivePlatform:
         experience = input("Введите требуемый опыт работы (для любого введите '-'): ")
 
         api.search_params = keyword
-        api.city = city
+        api.area = city
         api.salary = salary
         api.experience = experience
 
@@ -55,8 +55,3 @@ class InteractivePlatform:
 
     def run(self):
         self.start()
-
-
-if __name__ == "__main__":
-    platform = InteractivePlatform()
-    platform.start()
