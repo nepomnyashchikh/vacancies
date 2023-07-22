@@ -16,3 +16,7 @@ class API(ABC):
     @abstractmethod
     def connect(self):
         pass
+
+    @abstractmethod
+    def match_keyword(self):
+        pass
